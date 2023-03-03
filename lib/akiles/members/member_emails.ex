@@ -31,8 +31,6 @@ defmodule Akiles.MemberEmail do
       |> Utils.keys_to_atoms()
       |> Enum.map(&struct!(%__MODULE__{}, &1))
       |> then(&{:ok, &1})
-
-      raise "TEST"
     else
       res -> res
     end
