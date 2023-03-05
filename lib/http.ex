@@ -30,6 +30,9 @@ defmodule Akiles.Http do
     end
   end
  
+  :cursor_next
+  :has_next
+
   defp list_inner(endpoint, filter_val, cursor) do
     params = case {filter_val, cursor} do
       {nil, nil} -> []
