@@ -24,6 +24,13 @@ defmodule Akiles.Http do
 
   @spec list(String.t(), [{atom(), String.t()}] | nil, String.t() | nil) :: {:ok, [Map.t()]} | {:ok, []} | {:error, String.t()}
   def list(endpoint, filter_val \\ nil, cursor \\ nil) do
+    case list_inner(endpoint, filter_val, cursor) do
+      {:error, msg} -> {:error, msg}
+      data -> {:ok, data}
+    end
+  end
+ 
+  defp list_inner(endpoint, filter_val, cursor) do
     params = case {filter_val, cursor} do
       {nil, nil} -> []
       {[{field, val}], nil} -> [{field, val}]
@@ -32,7 +39,7 @@ defmodule Akiles.Http do
     end
 
     case get(endpoint, params) do
-      {:ok, %{"has_next" => true, "cursor_next" => cursor_next, "data" => data}} -> data ++ list(endpoint, filter_val, cursor_next)
+      {:ok, %{"has_next" => true, "cursor_next" => cursor_next, "data" => data}} -> data ++ list_inner(endpoint, filter_val, cursor_next)
       {:ok, %{"has_next" => false, "data" => data}} -> data
       {:error, msg} -> {:error, msg}
     end
