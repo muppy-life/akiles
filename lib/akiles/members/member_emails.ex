@@ -2,7 +2,7 @@ defmodule Akiles.MemberEmail do
   @moduledoc """
   Module that defines `Akiles Member Email` entity and the actions available to interact with.
   """
-  
+
   alias Akiles.Http
   alias Akiles.Utils
 
