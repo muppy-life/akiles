@@ -1,6 +1,6 @@
 # Akiles
 
-**TODO: Add description**
+Akiles SDK for Elixir.
 
 ## Installation
 
