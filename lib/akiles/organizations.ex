@@ -10,7 +10,7 @@ defmodule Akiles.Organization do
 
   defstruct [:id, :name, :is_deleted, :is_disabled, :created_at, :metadata]
 
-  @type organization() :: %__MODULE__{
+  @type t() :: %__MODULE__{
     id: String.t(),
     name: String.t(),
     is_deleted: boolean(),
@@ -19,21 +19,21 @@ defmodule Akiles.Organization do
     metadata: Map.t()
   }
 
-  @spec get_organization() :: organization()
+  @spec get_organization() :: t()
   def get_organization() do
     with {:ok, res} <- Http.get(@endpoint) do
       res |> Utils.keys_to_atoms() |> then(&struct!(%__MODULE__{}, &1))
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 
-  @spec edit_organization(Map.t()) :: organization()
+  @spec edit_organization(Map.t()) :: t()
   def edit_organization(data) do
     with {:ok, res} <- Http.patch(@endpoint, %{metadata: data}) do
       res |> Utils.keys_to_atoms() |> then(&struct!(%__MODULE__{}, &1))
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 end

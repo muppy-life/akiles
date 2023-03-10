@@ -25,7 +25,7 @@ defmodule Akiles.Member do
     metadata: Map.t()
   }
 
-  @spec list_members(nil | String.t()) :: {:ok, [member()]} | {:error, String.t()}
+  @spec list_members(String.t() | nil) :: {:ok, [member()]} | {:error, String.t()}
   def list_members(email \\ nil) do
     with {:ok, res} <- Http.list(@endpoint, email: email) do
       res 

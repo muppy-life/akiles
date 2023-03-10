@@ -2,6 +2,7 @@ defmodule Akiles.Http do
 
   alias HTTPoison.Response
 
+  @spec get(term()) :: {:ok, map()} | {:ok, list()} | {:error, term()}
   def get(endpoint) do
     with {:ok, %Response{body: res}} <- HTTPoison.get(base_url() <> endpoint, headers()),
       {:ok, res} <- Jason.decode(res) do
@@ -14,6 +15,7 @@ defmodule Akiles.Http do
     end
   end
 
+  @spec get(term(), term()) :: {:ok, map()} | {:error, term()}
   def get(endpoint, params) do
     params
     |> Enum.reduce("", &merge_args(&1, &2))
@@ -22,7 +24,7 @@ defmodule Akiles.Http do
     |> get()
   end
 
-  @spec list(String.t(), [{atom(), String.t()}] | nil, String.t() | nil) :: {:ok, [Map.t()]} | {:ok, []} | {:error, String.t()}
+  @spec list(term(), [{atom(), term()}] | nil, term() | nil) :: {:ok, [map()]} | {:ok, []} | {:error, term()}
   def list(endpoint, filter_val \\ nil, cursor \\ nil) do
     case list_inner(endpoint, filter_val, cursor) do
       {:error, msg} -> {:error, msg}
@@ -33,6 +35,7 @@ defmodule Akiles.Http do
   :cursor_next
   :has_next
 
+  @spec list_inner(term(), [{term(), term()}] | nil, term() | nil) :: list() | map() | {:error, term()}
   defp list_inner(endpoint, filter_val, cursor) do
     params = case {filter_val, cursor} do
       {nil, nil} -> []
@@ -48,6 +51,7 @@ defmodule Akiles.Http do
     end
   end
 
+  @spec patch(term(), map()) :: {:ok, map()} | {:error, term()}
   def patch(endpoint, data) do
     with {:ok, data} <- Jason.encode(data),
       {:ok, %Response{body: res}} <- HTTPoison.patch(base_url() <> endpoint, data, headers()),
@@ -61,6 +65,7 @@ defmodule Akiles.Http do
     end
   end
 
+  @spec post(term(), map()) :: {:ok, map()} | {:error, term()}
   def post(endpoint, data) do
     with {:ok, data} <- Jason.encode(data),
       {:ok, %Response{body: res}} <- HTTPoison.post(base_url() <> endpoint, data, headers()),
@@ -74,6 +79,7 @@ defmodule Akiles.Http do
     end
   end
 
+  @spec delete(term()) :: {:ok, map()} | {:error, term()}
   def delete(endpoint) do
     with {:ok, %Response{body: res}} <- HTTPoison.delete(base_url() <> endpoint, headers()),
       {:ok, res} <- Jason.decode(res) do
@@ -95,11 +101,6 @@ defmodule Akiles.Http do
 
   defp base_url, do: "https://api.akiles.app/v2"
 
-  defp merge_args({_arg, nil}, _acc) do
-    ""  
-  end
-
-  defp merge_args({arg, val}, acc) do
-    "#{acc}&#{arg}=#{val}"
-  end
+  defp merge_args({_arg, nil}, _acc), do: ""  
+  defp merge_args({arg, val}, acc), do: "#{acc}&#{arg}=#{val}"
 end

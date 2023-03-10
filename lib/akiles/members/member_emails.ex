@@ -13,18 +13,18 @@ defmodule Akiles.MemberEmail do
     :is_deleted, :is_disabled, :created_at, :metadata
   ]
 
-  @type member_email() :: %__MODULE__{
-    id: String.t(),
-    organization_id: String.t(),
-    member_id: String.t(),
-    email: String.t(),
+  @type t() :: %__MODULE__{
+    id: term(),
+    organization_id: term(),
+    member_id: term(),
+    email: term(),
     is_deleted: boolean(),
     is_disabled: boolean(),
     created_at: DateTime.t(),
-    metadata: Map.t()
+    metadata: map()
   }
 
-  @spec list_emails(String.t(), String.t() | nil) :: {:ok, [member_email()]} | {:ok, []} | {:error, String.t()}
+  @spec list_emails(term(), term() | nil) :: {:ok, [t()]} | {:ok, []} | {:error, term()}
   def list_emails(member_id, query \\ nil) do
     with {:ok, res} <- Http.list(endpoint(member_id), q: query) do
       res 
@@ -32,51 +32,51 @@ defmodule Akiles.MemberEmail do
       |> Enum.map(&struct!(%__MODULE__{}, &1))
       |> then(&{:ok, &1})
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 
-  @spec get_email(String.t(), String.t()) :: {:ok, member_email()} | {:error, String.t()}
+  @spec get_email(term(), term()) :: {:ok, t()} | {:error, term()}
   def get_email(member_id, email_id) do
     with {:ok, res} <- Http.get(endpoint(member_id) <> "/" <> email_id) do
       res
       |> Utils.keys_to_atoms()
       |> then(&{:ok, struct!(%__MODULE__{}, &1)})
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 
-  @spec create_email(String.t(), Map.t()) :: {:ok, member_email()} | {:error, String.t()}
+  @spec create_email(term(), map()) :: {:ok, t()} | {:error, term()}
   def create_email(member_id, data) do
     with {:ok, res} <- Http.post(endpoint(member_id), data) do
       res
       |> Utils.keys_to_atoms()
       |> then(&{:ok, struct!(%__MODULE__{}, &1)})
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 
-  @spec edit_email(String.t(), String.t(), Map.t()) :: {:ok, member_email()} | {:error, String.t()}
+  @spec edit_email(term(), term(), map()) :: {:ok, t()} | {:error, term()}
   def edit_email(member_id, email_id, data) do
     with {:ok, res} <- Http.patch(endpoint(member_id) <> "/" <> email_id, data) do
       res
       |> Utils.keys_to_atoms()
       |> then(&{:ok, struct!(%__MODULE__{}, &1)})
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 
-  @spec delete_email(String.t(), String.t()) :: {:ok, member_email()} | {:error, String.t()}
+  @spec delete_email(term(), term()) :: {:ok, t()} | {:error, term()}
   def delete_email(member_id, email_id) do
     with {:ok, res} <- Http.delete(endpoint(member_id) <> "/" <> email_id) do
       res
       |> Utils.keys_to_atoms()
       |> then(&{:ok, struct!(%__MODULE__{}, &1)})
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 end
