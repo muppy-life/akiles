@@ -13,19 +13,19 @@ defmodule Akiles.Member do
     :is_deleted, :is_disabled, :created_at, :metadata
   ]
 
-  @type member() :: %__MODULE__{
-    id: String.t(),
-    name: String.t(),
-    organization_id: String.t(),
+  @type t() :: %__MODULE__{
+    id: term(),
+    name: term(),
+    organization_id: term(),
     starts_at: DateTime.t(),
     ends_at: DateTime.t(),
     is_deleted: boolean(),
     is_disabled: boolean(),
     created_at: DateTime.t(),
-    metadata: Map.t()
+    metadata: map()
   }
 
-  @spec list_members(String.t() | nil) :: {:ok, [member()]} | {:error, String.t()}
+  @spec list_members(term() | nil) :: {:ok, [t()]} | {:error, term()}
   def list_members(email \\ nil) do
     with {:ok, res} <- Http.list(@endpoint, email: email) do
       res 
@@ -37,7 +37,7 @@ defmodule Akiles.Member do
     end
   end
 
-  @spec get_member(String.t()) :: {:ok, member()} | {:error, String.t()}
+  @spec get_member(term()) :: {:ok, t()} | {:error, term()}
   def get_member(member_id) do
     with {:ok, res} <- Http.get(@endpoint <> "/" <> member_id) do
       res
@@ -48,7 +48,7 @@ defmodule Akiles.Member do
     end
   end
 
-  @spec create_member(Map.t()) :: {:ok, member()} | {:error, String.t()}
+  @spec create_member(map()) :: {:ok, t()} | {:error, term()}
   def create_member(data) do
     with {:ok, res} <- Http.post(@endpoint, data) do
       res
@@ -59,7 +59,7 @@ defmodule Akiles.Member do
     end
   end
 
-  @spec edit_member(String.t(), Map.t()) :: {:ok, member()} | {:error, String.t()}
+  @spec edit_member(term(), map()) :: {:ok, t()} | {:error, term()}
   def edit_member(member_id, data) do
     with {:ok, res} <- Http.patch(@endpoint <> "/" <> member_id, data) do
       res
@@ -70,7 +70,7 @@ defmodule Akiles.Member do
     end
   end
 
-  @spec delete_member(String.t()) :: {:ok, member()} | {:error, String.t()}
+  @spec delete_member(term()) :: {:ok, t()} | {:error, term()}
   def delete_member(member_id) do
     with {:ok, res} <- Http.delete(@endpoint <> "/" <> member_id) do
       res 
