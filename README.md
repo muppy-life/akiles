@@ -1,6 +1,6 @@
 # Akiles
 
-Akiles SDK for Elixir.
+Elixir SDK for Akiles API.
 
 ## Installation
 
