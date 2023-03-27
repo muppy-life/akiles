@@ -33,7 +33,7 @@ defmodule Akiles.Member do
       |> Enum.map(&struct!(%__MODULE__{}, &1))
       |> then(&{:ok, &1})
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 
@@ -44,7 +44,7 @@ defmodule Akiles.Member do
       |> Utils.keys_to_atoms()
       |> then(&{:ok, struct!(%__MODULE__{}, &1)})
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 
@@ -55,7 +55,7 @@ defmodule Akiles.Member do
       |> Utils.keys_to_atoms() 
       |> then(&{:ok, struct!(%__MODULE__{}, &1)})
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 
@@ -66,7 +66,7 @@ defmodule Akiles.Member do
       |> Utils.keys_to_atoms() 
       |> then(&{:ok, struct!(%__MODULE__{}, &1)})
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 
@@ -77,7 +77,7 @@ defmodule Akiles.Member do
       |> Utils.keys_to_atoms() 
       |> then(&{:ok, struct!(%__MODULE__{}, &1)})
     else
-      res -> res
+      res -> Utils.manage_error(res, __MODULE__)
     end
   end
 end
