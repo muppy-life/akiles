@@ -34,26 +34,24 @@ defmodule Akiles.MemberGroupAssociation do
   ## Examples
 
       iex> Akiles.MemberGroupAssociation.list_group_assoc("mem_3merk33gt7ml3tde71f3")
-      {:ok, {
-              "data": [
-                {
-                  "id": "mga_3rkd81x2hc3qluv56pl1",
-                  "organization_id": "org_3merk33gt1v9ypgfzrp1",
-                  "member_id": "mem_3merk33gt7ml3tde71f3",
-                  "member_group_id": "mg_3merk33gt1692dk2p2m1",
-                  "starts_at": "2018-03-13T16:56:51.766836837Z",
-                  "ends_at": "2018-03-13T16:56:51.766836837Z",
-                  "is_deleted": false,
-                  "created_at": "2018-03-13T16:56:51.766836837Z",
-                  "metadata": {
-                    "key1": "value1",
-                    "key2": "value2"
-                  }
+      {:ok, [
+              {
+                "id": "mga_3rkd81x2hc3qluv56pl1",
+                "organization_id": "org_3merk33gt1v9ypgfzrp1",
+                "member_id": "mem_3merk33gt7ml3tde71f3",
+                "member_group_id": "mg_3merk33gt1692dk2p2m1",
+                "starts_at": "2018-03-13T16:56:51.766836837Z",
+                "ends_at": "2018-03-13T16:56:51.766836837Z",
+                "is_deleted": false,
+                "created_at": "2018-03-13T16:56:51.766836837Z",
+                "metadata": {
+                  "key1": "value1",
+                  "key2": "value2"
                 }
-              ],
-              "has_next": true,
-              "cursor_next": "i9vmCnOgONT2AjUMCn1K1N5cJg=="
-      }}
+              },
+              ...
+            ]
+        }
   """
   @spec list_group_assoc(term()) :: {:ok, [t()]} | {:ok, []} | {:error, term()}
   def list_group_assoc(member_id) do
