@@ -2,6 +2,24 @@ defmodule Akiles.Http do
 
   alias HTTPoison.Response
 
+  @doc """
+  Performs an HTTP 'GET' action.
+
+  Returns `{:ok, data}`.
+
+  ## Examples
+
+      iex> Akiles.Http.get("/members/")
+      {:ok, %{
+              "data" => [
+                %{
+                  "created_at" => "2023-03-10T18:35:09.870686208Z",
+                  "ends_at" => nil,
+                  ...
+                }
+              "has_next" => false
+            }
+  """
   @spec get(term()) :: {:ok, map()} | {:ok, list()} | {:error, term()}
   def get(endpoint) do
     with {:ok, %Response{body: res}} <- HTTPoison.get(base_url() <> endpoint, headers()),
@@ -15,6 +33,23 @@ defmodule Akiles.Http do
     end
   end
 
+  @doc """
+  Performs an HTTP 'GET' action and returns the data according to params.
+  The method formats the endpoint to include the params in the form "?param1=val1"
+
+  Returns `{:ok, data}`.
+
+  ## Examples
+
+      iex> Akiles.Http.get("/members/", %{name: "Nacho"})
+      {:ok, %{
+              "created_at" => "2023-03-10T18:35:09.870686208Z",
+              "ends_at" => nil,
+              ...
+              "name" => "Nacho"
+              ...
+            }
+  """
   @spec get(term(), term()) :: {:ok, map()} | {:error, term()}
   def get(endpoint, params) do
     params
@@ -24,6 +59,28 @@ defmodule Akiles.Http do
     |> get()
   end
 
+  @doc """
+  Returns all the data from the get request. Iterates over all the API pages to
+  return all the data. Optionally it accepts filter values. Also optionally accepts
+  a cursor value.
+
+  Returns `{:ok, data}`.
+
+  ## Examples
+
+      iex> Akiles.Http.list("/members/", %{name: "Nacho"})
+      {:ok, [
+              %{
+                "created_at" => "2023-03-10T18:35:09.870686208Z",
+                "ends_at" => nil,
+                ...
+                "name" => "Nacho"
+                ...
+              },
+              %{
+                ...
+              }]}
+  """
   @spec list(term(), [{atom(), term()}] | nil, term() | nil) :: {:ok, [map()]} | {:ok, []} | {:error, term()}
   def list(endpoint, filter_val \\ nil, cursor \\ nil) do
     case list_inner(endpoint, filter_val, cursor) do
@@ -31,10 +88,31 @@ defmodule Akiles.Http do
       data -> {:ok, data}
     end
   end
- 
+
   :cursor_next
   :has_next
 
+  @doc """
+  Performs all the iteration over the API pages for the list/3 method.
+  Takes a route, *filter_value, *cursor and returns the data
+
+  Returns `data`.
+
+  ## Examples
+
+      iex> Akiles.Http.list_inner("/members/", %{name: "Nacho"})
+      [
+        %{
+          "created_at" => "2023-03-10T18:35:09.870686208Z",
+          "ends_at" => nil,
+          ...
+          "name" => "Nacho"
+          ...
+        },
+        %{
+          ...
+        }]
+  """
   @spec list_inner(term(), [{term(), term()}] | nil, term() | nil) :: list() | map() | {:error, term()}
   defp list_inner(endpoint, filter_val, cursor) do
     params = case {filter_val, cursor} do
@@ -51,6 +129,25 @@ defmodule Akiles.Http do
     end
   end
 
+  @doc """
+  Performs an HTTP PATCH action to the 'endpoint' path, passing the data encoded
+
+  Returns the patched object.
+
+  ## Examples
+
+      iex> Akiles.Http.patch("/members/mem_3x8ndhg6q5dhhcehj7a1", %{metadata: %{test_key: "Test"}})
+      {:ok, %{
+            "created_at" => "2023-03-24T11:07:07.059453952Z",
+            "ends_at" => nil,
+            "id" => "mem_3x8ndhg6q5dhhcehj7a1",
+            "is_deleted" => false,
+            "metadata" => %{"test_key" => "Test"},
+            "name" => "Nacho",
+            "organization_id" => "org_3x5bggk73t6d37ubd7vh",
+            "starts_at" => nil
+            }}
+  """
   @spec patch(term(), map()) :: {:ok, map()} | {:error, term()}
   def patch(endpoint, data) do
     with {:ok, data} <- Jason.encode(data),
@@ -65,6 +162,25 @@ defmodule Akiles.Http do
     end
   end
 
+  @doc """
+  Performs an HTTP POST action
+
+  Returns the posted object.
+
+  ## Examples
+
+      iex> Akiles.Http.post("/members/", %{name: "John Doe"})
+      {:ok, %{
+            "created_at" => "2023-03-24T11:07:07.059453952Z",
+            "ends_at" => nil,
+            "id" => "mem_3x8ndhg6q5dhhcehj7a1",
+            "is_deleted" => false,
+            "metadata" => %{},
+            "name" => "John Doe",
+            "organization_id" => "org_3x5bggk73t6d37ubd7vh",
+            "starts_at" => nil
+            }}
+  """
   @spec post(term(), map()) :: {:ok, map()} | {:error, term()}
   def post(endpoint, data) do
     with {:ok, data} <- Jason.encode(data),
@@ -79,6 +195,25 @@ defmodule Akiles.Http do
     end
   end
 
+  @doc """
+  Performs an HTTP DELETE action
+
+  Returns the deleted object.
+
+  ## Examples
+
+      iex> Akiles.Http.delete("/members/mem_3x8ndhg6q5dhhcehj7a1")
+      {:ok, %{
+            "created_at" => "2023-03-24T11:07:07.059453952Z",
+            "ends_at" => nil,
+            "id" => "mem_3x8ndhg6q5dhhcehj7a1",
+            "is_deleted" => true,
+            "metadata" => %{},
+            "name" => "John Doe",
+            "organization_id" => "org_3x5bggk73t6d37ubd7vh",
+            "starts_at" => nil
+            }}
+  """
   @spec delete(term()) :: {:ok, map()} | {:error, term()}
   def delete(endpoint) do
     with {:ok, %Response{body: res}} <- HTTPoison.delete(base_url() <> endpoint, headers()),
@@ -101,6 +236,6 @@ defmodule Akiles.Http do
 
   defp base_url, do: "https://api.akiles.app/v2"
 
-  defp merge_args({_arg, nil}, _acc), do: ""  
+  defp merge_args({_arg, nil}, _acc), do: ""
   defp merge_args({arg, val}, acc), do: "#{acc}&#{arg}=#{val}"
 end

@@ -6,10 +6,10 @@ defmodule Akiles.Group do
   alias Akiles.Http
   alias Akiles.Utils
 
-  @endpoint "/member_groups" 
+  @endpoint "/member_groups"
 
   defstruct [
-    :id, :organization_id, :name, 
+    :id, :organization_id, :name,
     :is_deleted, :created_at, :metadata
   ]
 
@@ -22,10 +22,30 @@ defmodule Akiles.Group do
     metadata: map()
   }
 
+  @doc """
+  Lists all member groups.
+
+  Returns `{:ok, data}`.
+
+  ## Examples
+
+      iex> Akiles.Group.list_groups
+      {:ok, [
+              %Akiles.Group{
+                created_at: "2023-03-27T09:09:27.703986176Z",
+                id: "mg_3x94q5zq9r6vc143qslh",
+                is_deleted: false,
+                metadata: %{"hola" => "mundo"},
+                name: "TEST",
+                organization_id: "org_3x5bggk73t6d37ubd7vh"
+              },
+              ...
+            ]
+  """
   @spec list_groups(term() | nil) :: {:ok, [t()]} | {:ok, []} | {:error, term()}
   def list_groups(query \\ nil) do
     with {:ok, res} <- Http.list(@endpoint, [q: query]) do
-      res 
+      res
       |> Utils.keys_to_atoms()
       |> Enum.map(&struct!(%__MODULE__{}, &1))
       |> then(&{:ok, &1})
@@ -34,6 +54,23 @@ defmodule Akiles.Group do
     end
   end
 
+  @doc """
+  Returns the data of the given group id.
+
+  Returns `{:ok, data}`.
+
+  ## Examples
+
+      iex> Akiles.Group.get_group("mg_3x94q5zq9r6vc143qslh")
+      {:ok, %Akiles.Group{
+                created_at: "2023-03-27T09:09:27.703986176Z",
+                id: "mg_3x94q5zq9r6vc143qslh",
+                is_deleted: false,
+                metadata: %{"hola" => "mundo"},
+                name: "TEST",
+                organization_id: "org_3x5bggk73t6d37ubd7vh"
+              }
+  """
   @spec get_group(term()) :: {:ok, t()} | {:error, term()}
   def get_group(group_id) do
     with {:ok, res} <- Http.get(@endpoint <> "/" <> group_id) do
@@ -56,6 +93,25 @@ defmodule Akiles.Group do
     end
   end
 
+  @doc """
+  Adds data to the metadata map of the group.
+
+  Returns `{:ok, group}`.
+
+  ## Examples
+
+      iex> Akiles.Group.edit_group("mg_3x94q5zq9r6vc143qslh", %{metadata: %{key1: "val1"}})
+      {:ok, %Akiles.Group{
+                created_at: "2023-03-27T09:09:27.703986176Z",
+                id: "mg_3x94q5zq9r6vc143qslh",
+                is_deleted: false,
+                metadata: %{"hola" => "mundo",
+                            "key1: => "val1"
+                            },
+                name: "TEST",
+                organization_id: "org_3x5bggk73t6d37ubd7vh"
+              }
+  """
   @spec edit_group(term(), map()) :: {:ok, t()} | {:error, term()}
   def edit_group(group_id, data) do
     with {:ok, res} <- Http.patch(@endpoint <> "/" <> group_id, data) do
@@ -66,6 +122,7 @@ defmodule Akiles.Group do
       res -> Utils.manage_error(res, __MODULE__)
     end
   end
+
 
   @spec delete_group(term()) :: {:ok, t()} | {:error, term()}
   def delete_group(group_id) do

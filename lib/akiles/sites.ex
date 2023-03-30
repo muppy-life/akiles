@@ -2,14 +2,14 @@ defmodule Akiles.Site do
   @moduledoc """
   Module that defines `Akiles Site` entity and the actions available to interact with.
   """
-  
+
   alias Akiles.Http
   alias Akiles.Utils
 
   @endpoint "/sites"
 
   defstruct [
-    :id, :name, :organization_id, :geo, :map, :phone, :email, :info, :timezone, 
+    :id, :name, :organization_id, :geo, :map, :phone, :email, :info, :timezone,
     :is_deleted, :is_disabled, :created_at, :metadata
   ]
 
@@ -41,10 +41,56 @@ defmodule Akiles.Site do
     metadata: map()
   }
 
+  @doc """
+  Lists all sites.
+
+  Returns `{:ok, data}`.
+
+  ## Examples
+
+      iex> Akiles.Site.list_sites
+      {:ok, {
+            "data": [
+              {
+                "id": "site_3merk33gt21kym11een1",
+                "name": "string",
+                "organization_id": "org_3merk33gt1v9ypgfzrp1",
+                "geo": {
+                  "location": {
+                    "lat": 41.290485,
+                    "lng": 2.1829076
+                  },
+                  "radius": 100
+                },
+                "map": {
+                  "location": {
+                    "lat": 41.290485,
+                    "lng": 2.1829076
+                  },
+                  "place_id": "string",
+                  "address": "string",
+                  "image_url": "string"
+                },
+                "phone": "string",
+                "email": "string",
+                "info": "string",
+                "timezone": "Europe/Madrid",
+                "is_deleted": false,
+                "created_at": "2018-03-13T16:56:51.766836837Z",
+                "metadata": {
+                  "key1": "value1",
+                  "key2": "value2"
+                }
+              }
+            ],
+            "has_next": true,
+            "cursor_next": "i9vmCnOgONT2AjUMCn1K1N5cJg=="
+          }
+  """
   @spec list_sites() :: {:ok, [t()]} | {:error, term()}
   def list_sites() do
     with {:ok, res} <- Http.list(@endpoint) do
-      res 
+      res
       |> Utils.keys_to_atoms()
       |> Enum.map(&struct!(%__MODULE__{}, &1))
       |> then(&{:ok, &1})
@@ -56,8 +102,8 @@ defmodule Akiles.Site do
   @spec get_site(term()) :: {:ok, t()} | {:error, term()}
   def get_site(site_id) do
     with {:ok, res} <- Http.get(@endpoint <> "/" <> site_id) do
-      res 
-      |> Utils.keys_to_atoms() 
+      res
+      |> Utils.keys_to_atoms()
       |> then(&{:ok, struct!(%__MODULE__{}, &1)})
     else
       res -> Utils.manage_error(res, __MODULE__)

@@ -24,4 +24,15 @@ defmodule AkilesTests.Member do
     assert edit_data.name == edited_user.name
     assert created_user.id == edited_user.id
   end
+
+  test "list_members/0 and get_member work well" do
+    assert {:ok, [data | _rest]} = Akiles.Member.list_members
+    assert {:ok, data} == Akiles.Member.get_member(data.id)
+  end
+
+  test "invalid id errors are well digested" do
+    assert {:error, _msg} = Akiles.Member.get_member("InvalidId")
+    assert {:error, _msg} = Akiles.Member.edit_member("InvalidId", %{})
+    assert {:error, _msg} = Akiles.Member.delete_member("InvalidId")
+  end
 end

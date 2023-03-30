@@ -6,10 +6,10 @@ defmodule Akiles.Event do
   alias Akiles.Http
   alias Akiles.Utils
 
-  @endpoint "/events" 
+  @endpoint "/events"
 
   defstruct [
-    :id, :organization_id, :subject, 
+    :id, :organization_id, :subject,
     :verb, :object, :created_at
   ]
 
@@ -25,8 +25,8 @@ defmodule Akiles.Event do
   @type event_verb() :: :create | :edit | :delete | :use
 
   @type event_object() :: %{
-    type: term(), 
-    admin_id: term(), 
+    type: term(),
+    admin_id: term(),
     api_key_id: term(),
     device_id: term(),
     gadget_id: term(),
@@ -47,11 +47,31 @@ defmodule Akiles.Event do
     created_at: DateTime.t()
   }
 
+  @doc """
+  Lists te last 100 events.
+
+  Returns `{:ok, %{*cursor_next, data, has_next}}`.
+
+  ## Examples
+
+      iex> Akiles.Http.get("/members/")
+      {:ok, %{
+              "cursor_next" => "vna9_c92McHWMsr26ytTHs_sHsrLMy4nMZ"
+              "data" => [
+                %{
+                  "created_at" => "2023-03-10T18:35:09.870686208Z",
+                  "ends_at" => nil,
+                  ...
+                },
+                ...]
+              "has_next" => True
+              }
+  """
   @spec list_events() :: {:ok, [t()]} | {:ok, []} | {:error, term()}
   def list_events() do
     # Get instead of list to pass limit hard threshold as events are very very numerous.
     with {:ok, res} <- Http.get(@endpoint, [limit: 100]) do
-      res 
+      res
       # These statements have to be commented because incoming data is not fully known.
       # It does not fully match the predefined structure for event entity.
       #|> Utils.keys_to_atoms()
@@ -62,6 +82,18 @@ defmodule Akiles.Event do
     end
   end
 
+  @doc """
+  Performs a GET for the given event id.
+
+  Returns `{:ok, %{data}}`.
+
+  ## Examples
+
+      iex> Akiles.Event.get_event("evt_3x6k7drxhj4r23l29cyh")
+      {:ok, %{
+
+              }
+  """
   @spec get_event(term()) :: {:ok, t()} | {:error, term()}
   def get_event(event_id) do
     with {:ok, res} <- Http.get(@endpoint <> "/" <> event_id) do
