@@ -9,7 +9,7 @@ defmodule Akiles.Group do
   @endpoint "/member_groups"
 
   defstruct [
-    :id, :organization_id, :name,
+    :id, :organization_id, :name, :permissions,
     :is_deleted, :created_at, :metadata
   ]
 
@@ -17,6 +17,7 @@ defmodule Akiles.Group do
     id: term(),
     organization_id: term(),
     name: term(),
+    permissions: list(),
     is_deleted: boolean(),
     created_at: DateTime.t(),
     metadata: map()
@@ -62,14 +63,17 @@ defmodule Akiles.Group do
   ## Examples
 
       iex> Akiles.Group.get_group("mg_3x94q5zq9r6vc143qslh")
-      {:ok, %Akiles.Group{
-                created_at: "2023-03-27T09:09:27.703986176Z",
-                id: "mg_3x94q5zq9r6vc143qslh",
-                is_deleted: false,
-                metadata: %{"hola" => "mundo"},
-                name: "TEST",
-                organization_id: "org_3x5bggk73t6d37ubd7vh"
-              }
+      {
+        :ok,
+        %Akiles.Group{
+          created_at: "2023-03-27T09:09:27.703986176Z",
+          id: "mg_3x94q5zq9r6vc143qslh",
+          is_deleted: false,
+          metadata: %{"hola" => "mundo"},
+          name: "TEST",
+          organization_id: "org_3x5bggk73t6d37ubd7vh"
+        }
+      }
   """
   @spec get_group(term()) :: {:ok, t()} | {:error, term()}
   def get_group(group_id) do
