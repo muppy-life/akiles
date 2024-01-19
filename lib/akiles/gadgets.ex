@@ -10,7 +10,7 @@ defmodule Akiles.Gadget do
 
   defstruct [
     :id, :organization_id, :site_id, :name,
-    :action, :is_deleted, :created_at, :metadata
+    :actions, :is_deleted, :created_at, :metadata
   ]
 
   @type t() :: %__MODULE__{
@@ -18,8 +18,8 @@ defmodule Akiles.Gadget do
     organization_id: term(),
     site_id: term(),
     name: term(),
-    action: gadget_action(),
-    is_deleted: boolean(),
+    actions: [gadget_action()],
+    is_deleted: [boolean()],
     created_at: DateTime.t(),
     metadata: map()
   }
