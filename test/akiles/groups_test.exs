@@ -16,10 +16,9 @@ defmodule Akiles.GroupsTest do
     assert String.contains?(message, "INVALID_REQUEST")
   end
 
-  test "create_group/1 returns error" do
-    assert {:error, message} = Akiles.Group.create_group(%{name: "Test Group"})
-    assert String.contains?(message, "Elixir.Akiles.Group")
-    assert String.contains?(message, "METHOD_NOT_ALLOWED")
+  test "create_group/1 & delete_group/1 works well" do
+    assert {:ok, group} = Akiles.Group.create_group(%{name: "Test Group"})
+    assert {:ok, _group} = Akiles.Group.delete_group(group.id)
   end
 
   test "edit_group/2 errors well digested" do
