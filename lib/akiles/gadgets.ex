@@ -9,7 +9,7 @@ defmodule Akiles.Gadget do
   @endpoint "/gadgets"
 
   defstruct [
-    :id, :organization_id, :site_id, :name,
+    :id, :organization_id, :site_id, :name, :position,
     :actions, :is_deleted, :created_at, :metadata
   ]
 

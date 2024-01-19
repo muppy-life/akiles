@@ -9,7 +9,7 @@ defmodule Akiles.MemberMagicLink do
   def endpoint(member_id), do: "/members/" <> member_id <> "/magic_links"
 
   defstruct [
-    :id, :organization_id, :member_id, :is_deleted, :created_at, :metadata, :term
+    :id, :organization_id, :member_id, :is_deleted, :created_at, :metadata, :link
   ]
 
   @type t() :: %__MODULE__{
@@ -18,6 +18,7 @@ defmodule Akiles.MemberMagicLink do
     member_id: term(),
     is_deleted: boolean(),
     created_at: DateTime.t(),
+    link: term(),
     metadata: map()
   }
 
