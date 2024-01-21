@@ -130,6 +130,38 @@ defmodule Akiles.Http do
   end
 
   @doc """
+    This function filters item by getting lists of items until one matches the specifed criteria.
+  """
+  @spec search(term(), [{term(), term()}], term() | nil) :: {:ok, map()} | {:error, term()}
+  def search(endpoint, [{key, val}], cursor) when key |> is_atom() do
+    search(endpoint, [{key |> Atom.to_string(), val}], cursor)
+  end
+  def search(endpoint, [{key, val}] = param, nil) do
+    res = get(endpoint)
+    manage_search(endpoint, res, param)
+    |> then(& {:ok, &1})
+  end
+  def search(endpoint, [{key, val}] = param, cursor) do
+    res = get(endpoint, cursor: cursor)
+    manage_search(endpoint, res, param)
+    |> then(& {:ok, &1})
+  end
+
+  defp manage_search(endpoint, {:ok, %{"has_next" => true, "cursor_next" => cursor, "data" => data}}, [{key, val}] = param) do
+    res = data |> Enum.find(fn x -> Map.get(x, key) == val end)
+    case res do
+      nil -> search(endpoint, param, cursor)
+      res -> res
+    end
+  end
+
+  defp manage_search(_endpoint, {:ok, %{"has_next" => false, "data" => data}}, [{key, val}]) do
+    data |> Enum.find(fn x -> Map.get(x, key) == val end)
+  end
+
+  defp manage_search(_endpoint, {:error, msg}, _param), do: {:error, msg}
+
+  @doc """
   Performs an HTTP PATCH action to the 'endpoint' path, passing the data encoded
 
   Returns the patched object.

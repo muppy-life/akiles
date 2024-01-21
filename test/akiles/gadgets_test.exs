@@ -3,6 +3,18 @@ defmodule Akiles.GadgetsTest do
   alias Akiles.Gadget
 
   test "list_gadgets/0 works well" do
-    assert {:ok, []} = Gadget.list_gadgets
+    {:ok, gadgets} = Gadget.list_gadgets
+    assert %Gadget{} = gadgets |> List.first()
+  end
+
+  test "get_gadget/1 works well" do
+    {:ok, [gadget | _rest]} = Gadget.list_gadgets
+    {:ok, target} = Gadget.get_gadget(gadget.id)
+    assert target == gadget
+  end
+
+  test "find_gadget/1 works well" do
+    {:ok, target} = Gadget.find_gadget(name: "Controller 1")
+    assert target.name == "Controller 1"
   end
 end

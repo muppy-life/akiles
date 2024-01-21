@@ -90,6 +90,17 @@ defmodule Akiles.Member do
     end
   end
 
+  @spec find_member([{term(), term()}]) :: {:ok, t()} | {:error, term()}
+  def find_member(param) do
+    with {:ok, res} <- Http.search(@endpoint, param, nil) do
+      res
+      |> Utils.keys_to_atoms()
+      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+    else
+      res -> Utils.manage_error(res, __MODULE__)
+    end
+  end
+
   @doc """
   Creates member.
 

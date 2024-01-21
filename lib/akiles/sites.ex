@@ -110,6 +110,18 @@ defmodule Akiles.Site do
     end
   end
 
+
+  @spec find_site([{term(), term()}]) :: {:ok, t()} | {:error, term()}
+  def find_site(param) do
+    with {:ok, res} <- Http.search(@endpoint, param, nil) do
+      res
+      |> Utils.keys_to_atoms()
+      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+    else
+      res -> Utils.manage_error(res, __MODULE__)
+    end
+  end
+
   @spec edit_site(term(), map()) :: {:ok, t()} | {:error, term()}
   def edit_site(site_id, data) do
     with {:ok, res} <- Http.patch(@endpoint <> "/" <> site_id, %{metadata: data}) do

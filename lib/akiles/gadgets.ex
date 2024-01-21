@@ -96,6 +96,17 @@ defmodule Akiles.Gadget do
     end
   end
 
+  @spec find_gadget([{term(), term()}]) :: {:ok, t()} | {:error, term()}
+  def find_gadget(param) do
+    with {:ok, res} <- Http.search(@endpoint, param, nil) do
+      res
+      |> Utils.keys_to_atoms()
+      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+    else
+      res -> Utils.manage_error(res, __MODULE__)
+    end
+  end
+
     @doc """
   Edits the gadget data -> Adds key value pairs to the metadata.
 

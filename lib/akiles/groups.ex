@@ -86,6 +86,18 @@ defmodule Akiles.Group do
     end
   end
 
+
+  @spec find_group([{term(), term()}]) :: {:ok, t()} | {:error, term()}
+  def find_group(param) do
+    with {:ok, res} <- Http.search(@endpoint, param, nil) do
+      res
+      |> Utils.keys_to_atoms()
+      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+    else
+      res -> Utils.manage_error(res, __MODULE__)
+    end
+  end
+
   @spec create_group(map()) :: {:ok, t()} | {:error, term()}
   def create_group(data) do
     with {:ok, res} <- Http.post(@endpoint, data) do
