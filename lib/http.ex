@@ -56,7 +56,7 @@ defmodule Akiles.Http do
   def get(endpoint, params) do
     params
     |> Enum.reduce("", &merge_args(&1, &2))
-    |> String.slice(1..-1)
+    |> String.slice(1..-1//1)
     |> then(&(endpoint <> "?" <> &1))
     |> get()
   end
@@ -118,7 +118,7 @@ defmodule Akiles.Http do
   """
   @spec list_inner(term(), [{term(), term()}] | nil, term() | nil) ::
           list() | map() | {:error, term()}
-  defp list_inner(endpoint, filter_val, cursor) do
+  def list_inner(endpoint, filter_val, cursor) do
     params =
       case {filter_val, cursor} do
         {nil, nil} -> []
@@ -140,21 +140,21 @@ defmodule Akiles.Http do
   end
 
   @doc """
-    This function filters item by getting lists of items until one matches the specifed criteria.
+  This function filters item by getting lists of items until one matches the specifed criteria.
   """
   @spec search(term(), [{term(), term()}], term() | nil) :: {:ok, map()} | {:error, term()}
-  def search(endpoint, [{key, val}], cursor) when key |> is_atom() do
+  def search(endpoint, [{key, val}] = _param, cursor) when key |> is_atom() do
     search(endpoint, [{key |> Atom.to_string(), val}], cursor)
   end
 
-  def search(endpoint, [{key, val}] = param, nil) do
+  def search(endpoint, param, nil) do
     res = get(endpoint)
 
     manage_search(endpoint, res, param)
     |> then(&{:ok, &1})
   end
 
-  def search(endpoint, [{key, val}] = param, cursor) do
+  def search(endpoint, param, cursor) do
     res = get(endpoint, cursor: cursor)
 
     manage_search(endpoint, res, param)
