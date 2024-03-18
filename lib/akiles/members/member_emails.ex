@@ -9,20 +9,26 @@ defmodule Akiles.MemberEmail do
   def endpoint(member_id), do: "/members/" <> member_id <> "/emails"
 
   defstruct [
-    :id, :organization_id, :member_id, :email,
-    :is_deleted, :is_disabled, :created_at, :metadata
+    :id,
+    :organization_id,
+    :member_id,
+    :email,
+    :is_deleted,
+    :is_disabled,
+    :created_at,
+    :metadata
   ]
 
   @type t() :: %__MODULE__{
-    id: term(),
-    organization_id: term(),
-    member_id: term(),
-    email: term(),
-    is_deleted: boolean(),
-    is_disabled: boolean(),
-    created_at: DateTime.t(),
-    metadata: map()
-  }
+          id: term(),
+          organization_id: term(),
+          member_id: term(),
+          email: term(),
+          is_deleted: boolean(),
+          is_disabled: boolean(),
+          created_at: DateTime.t(),
+          metadata: map()
+        }
 
   @doc """
   Lists all emails associated to the given MemberId.

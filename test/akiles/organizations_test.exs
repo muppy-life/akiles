@@ -2,7 +2,7 @@ defmodule Akiles.OrganizationsTest do
   use ExUnit.Case
 
   test "get_organization/0 works well" do
-    assert {:ok, _data} = Akiles.Organization.get_organization
+    assert {:ok, _data} = Akiles.Organization.get_organization()
   end
 
   test "edit_organization/1 digests errors" do

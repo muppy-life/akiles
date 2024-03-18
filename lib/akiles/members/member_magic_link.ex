@@ -9,18 +9,24 @@ defmodule Akiles.MemberMagicLink do
   def endpoint(member_id), do: "/members/" <> member_id <> "/magic_links"
 
   defstruct [
-    :id, :organization_id, :member_id, :is_deleted, :created_at, :metadata, :link
+    :id,
+    :organization_id,
+    :member_id,
+    :is_deleted,
+    :created_at,
+    :metadata,
+    :link
   ]
 
   @type t() :: %__MODULE__{
-    id: term(),
-    organization_id: term(),
-    member_id: term(),
-    is_deleted: boolean(),
-    created_at: DateTime.t(),
-    link: term(),
-    metadata: map()
-  }
+          id: term(),
+          organization_id: term(),
+          member_id: term(),
+          is_deleted: boolean(),
+          created_at: DateTime.t(),
+          link: term(),
+          metadata: map()
+        }
 
   @doc """
   Lists all member magic links.

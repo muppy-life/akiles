@@ -27,7 +27,7 @@ defmodule AkilesTests.Member do
   end
 
   test "list_members/0 and get_member work well" do
-    assert {:ok, [data | _rest]} = Member.list_members
+    assert {:ok, [data | _rest]} = Member.list_members()
     assert {:ok, data} == Member.get_member(data.id)
   end
 

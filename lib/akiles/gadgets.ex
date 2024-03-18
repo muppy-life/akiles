@@ -9,25 +9,32 @@ defmodule Akiles.Gadget do
   @endpoint "/gadgets"
 
   defstruct [
-    :id, :organization_id, :site_id, :name, :position,
-    :actions, :is_deleted, :created_at, :metadata
+    :id,
+    :organization_id,
+    :site_id,
+    :name,
+    :position,
+    :actions,
+    :is_deleted,
+    :created_at,
+    :metadata
   ]
 
   @type t() :: %__MODULE__{
-    id: term(),
-    organization_id: term(),
-    site_id: term(),
-    name: term(),
-    actions: [gadget_action()],
-    is_deleted: [boolean()],
-    created_at: DateTime.t(),
-    metadata: map()
-  }
+          id: term(),
+          organization_id: term(),
+          site_id: term(),
+          name: term(),
+          actions: [gadget_action()],
+          is_deleted: [boolean()],
+          created_at: DateTime.t(),
+          metadata: map()
+        }
 
   @type gadget_action() :: %{
-    id: term(),
-    name: term()
-  }
+          id: term(),
+          name: term()
+        }
 
   @doc """
   Lists all gadgets.
@@ -64,7 +71,7 @@ defmodule Akiles.Gadget do
     end
   end
 
-    @doc """
+  @doc """
   Get gadget data from Id.
 
   returns {:ok, data}
@@ -107,7 +114,7 @@ defmodule Akiles.Gadget do
     end
   end
 
-    @doc """
+  @doc """
   Edits the gadget data -> Adds key value pairs to the metadata.
 
   Returns `{:ok, data}`.

@@ -18,8 +18,11 @@ defmodule AkilesTest.Http do
     input_data = %{name: "Jonathan Doe"}
     {:ok, data} = Http.post("/members", input_data)
     assert data["metadata"] == %{}
-    assert {:ok, data} = Http.patch("/members/" <> data["id"], %{metadata: %{test_key: "test_value"}})
+
+    assert {:ok, data} =
+             Http.patch("/members/" <> data["id"], %{metadata: %{test_key: "test_value"}})
+
     assert {:ok, _data} = Http.delete("/members/" <> data["id"])
-    assert data["metadata"] == %{"test_key"=> "test_value"}
+    assert data["metadata"] == %{"test_key" => "test_value"}
   end
 end

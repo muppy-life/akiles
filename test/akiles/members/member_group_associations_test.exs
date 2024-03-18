@@ -26,9 +26,16 @@ defmodule Members.MemberGroupAssociationsTest do
     }
 
     {:ok, created_user} = Member.create_member(input_user_data)
-    {:ok, created_assoc} = MemberGroupAssociation.create_group_assoc(created_user.id, input_assoc_data)
-    {:ok, edited_assoc} = MemberGroupAssociation.edit_group_assoc(created_user.id, created_assoc.id, input_edit_data)
-    {:ok, deleted_assoc} = MemberGroupAssociation.delete_group_assoc(created_user.id, created_assoc.id)
+
+    {:ok, created_assoc} =
+      MemberGroupAssociation.create_group_assoc(created_user.id, input_assoc_data)
+
+    {:ok, edited_assoc} =
+      MemberGroupAssociation.edit_group_assoc(created_user.id, created_assoc.id, input_edit_data)
+
+    {:ok, deleted_assoc} =
+      MemberGroupAssociation.delete_group_assoc(created_user.id, created_assoc.id)
+
     {:ok, _deleted_user} = Member.delete_member(created_user.id)
     {:ok, _group} = Group.delete_group(group.id)
 
@@ -42,6 +49,7 @@ defmodule Members.MemberGroupAssociationsTest do
   test "list and get" do
     input_user_data = %{name: "John Doe"}
     input_group_id = "mg_3x94q5zq9r6vc143qslh"
+
     input_assoc_data = %{
       member_group_id: input_group_id,
       starts_at: "2023-03-13T16:56:51.766836837Z",
@@ -50,12 +58,18 @@ defmodule Members.MemberGroupAssociationsTest do
     }
 
     {:ok, created_user} = Member.create_member(input_user_data)
-    {:ok, created_assoc} = MemberGroupAssociation.create_group_assoc(created_user.id, input_assoc_data)
+
+    {:ok, created_assoc} =
+      MemberGroupAssociation.create_group_assoc(created_user.id, input_assoc_data)
 
     assert {:ok, [assoc | _rest]} = MemberGroupAssociation.list_group_assoc(created_user.id)
-    assert {:ok, assoc} == MemberGroupAssociation.get_group_assoc(created_user.id, created_assoc.id)
 
-    {:ok, _deleted_assoc} = MemberGroupAssociation.delete_group_assoc(created_user.id, created_assoc.id)
+    assert {:ok, assoc} ==
+             MemberGroupAssociation.get_group_assoc(created_user.id, created_assoc.id)
+
+    {:ok, _deleted_assoc} =
+      MemberGroupAssociation.delete_group_assoc(created_user.id, created_assoc.id)
+
     {:ok, _deleted_user} = Member.delete_member(created_user.id)
   end
 

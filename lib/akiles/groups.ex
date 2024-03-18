@@ -9,19 +9,24 @@ defmodule Akiles.Group do
   @endpoint "/member_groups"
 
   defstruct [
-    :id, :organization_id, :name, :permissions,
-    :is_deleted, :created_at, :metadata
+    :id,
+    :organization_id,
+    :name,
+    :permissions,
+    :is_deleted,
+    :created_at,
+    :metadata
   ]
 
   @type t() :: %__MODULE__{
-    id: term(),
-    organization_id: term(),
-    name: term(),
-    permissions: list(),
-    is_deleted: boolean(),
-    created_at: DateTime.t(),
-    metadata: map()
-  }
+          id: term(),
+          organization_id: term(),
+          name: term(),
+          permissions: list(),
+          is_deleted: boolean(),
+          created_at: DateTime.t(),
+          metadata: map()
+        }
 
   @doc """
   Lists all member groups.
@@ -45,7 +50,7 @@ defmodule Akiles.Group do
   """
   @spec list_groups(term() | nil) :: {:ok, [t()]} | {:ok, []} | {:error, term()}
   def list_groups(query \\ nil) do
-    with {:ok, res} <- Http.list(@endpoint, [q: query]) do
+    with {:ok, res} <- Http.list(@endpoint, q: query) do
       res
       |> Utils.keys_to_atoms()
       |> Enum.map(&struct!(%__MODULE__{}, &1))
@@ -85,7 +90,6 @@ defmodule Akiles.Group do
       res -> Utils.manage_error(res, __MODULE__)
     end
   end
-
 
   @spec find_group([{term(), term()}]) :: {:ok, t()} | {:error, term()}
   def find_group(param) do
@@ -138,7 +142,6 @@ defmodule Akiles.Group do
       res -> Utils.manage_error(res, __MODULE__)
     end
   end
-
 
   @spec delete_group(term()) :: {:ok, t()} | {:error, term()}
   def delete_group(group_id) do

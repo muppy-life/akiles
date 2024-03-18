@@ -9,19 +9,24 @@ defmodule Akiles.MemberPin do
   def endpoint(member_id), do: "/members/" <> member_id <> "/pins"
 
   defstruct [
-    :id, :member_id, :length, :pin,
-    :is_deleted, :created_at, :metadata
+    :id,
+    :member_id,
+    :length,
+    :pin,
+    :is_deleted,
+    :created_at,
+    :metadata
   ]
 
   @type t() :: %__MODULE__{
-    id: term(),
-    member_id: term(),
-    length: Integer.t(),
-    pin: term(),
-    is_deleted: boolean(),
-    created_at: DateTime.t(),
-    metadata: map()
-  }
+          id: term(),
+          member_id: term(),
+          length: Integer.t(),
+          pin: term(),
+          is_deleted: boolean(),
+          created_at: DateTime.t(),
+          metadata: map()
+        }
 
   @doc """
   Lists all member pins.
@@ -78,7 +83,7 @@ defmodule Akiles.MemberPin do
               "key1": "value1",
               "key2": "value2"
             }
-}}
+  }}
   """
   @spec get_pin(term(), term()) :: {:ok, t()} | {:error, term()}
   def get_pin(member_id, pin_id) do
@@ -149,7 +154,7 @@ defmodule Akiles.MemberPin do
                 "key1": "value1",
                 "key2": "value2"
               }
-}}
+  }}
   """
   @spec edit_pin(term(), term(), map()) :: {:ok, t()} | {:error, term()}
   def edit_pin(member_id, pin_id, data) do
@@ -181,7 +186,7 @@ defmodule Akiles.MemberPin do
               "key1": "value1",
               "key2": "value2"
             }
-}}
+  }}
   """
   @spec delete_pin(term(), term()) :: {:ok, t()} | {:error, term()}
   def delete_pin(member_id, pin_id) do
@@ -213,7 +218,7 @@ defmodule Akiles.MemberPin do
               "key1": "value1",
               "key2": "value2"
             }
-}}
+  }}
   """
   @spec reveal_pin(term(), term()) :: {:ok, t()} | {:error, term()}
   def reveal_pin(member_id, pin_id) do
