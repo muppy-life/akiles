@@ -9,37 +9,48 @@ defmodule Akiles.Site do
   @endpoint "/sites"
 
   defstruct [
-    :id, :name, :organization_id, :geo, :map, :phone, :email, :info, :timezone,
-    :is_deleted, :is_disabled, :created_at, :metadata
+    :id,
+    :name,
+    :organization_id,
+    :geo,
+    :map,
+    :phone,
+    :email,
+    :info,
+    :timezone,
+    :is_deleted,
+    :is_disabled,
+    :created_at,
+    :metadata
   ]
 
   @type site_geo() :: %{
-    location: %{lat: term(), lng: term()},
-    radius: Integer.t()
-  }
+          location: %{lat: term(), lng: term()},
+          radius: Integer.t()
+        }
 
   @type site_map() :: %{
-    location: %{lat: term(), lng: term()},
-    place_id: term(),
-    address: term(),
-    image_url: term()
-  }
+          location: %{lat: term(), lng: term()},
+          place_id: term(),
+          address: term(),
+          image_url: term()
+        }
 
   @type t() :: %__MODULE__{
-    id: term(),
-    name: term(),
-    organization_id: term(),
-    geo: site_geo(),
-    map: site_map(),
-    phone: term(),
-    email: term(),
-    info: term(),
-    timezone: term(),
-    is_deleted: boolean(),
-    is_disabled: boolean(),
-    created_at: DateTime.t(),
-    metadata: map()
-  }
+          id: term(),
+          name: term(),
+          organization_id: term(),
+          geo: site_geo(),
+          map: site_map(),
+          phone: term(),
+          email: term(),
+          info: term(),
+          timezone: term(),
+          is_deleted: boolean(),
+          is_disabled: boolean(),
+          created_at: DateTime.t(),
+          metadata: map()
+        }
 
   @doc """
   Lists all sites.
@@ -109,7 +120,6 @@ defmodule Akiles.Site do
       res -> Utils.manage_error(res, __MODULE__)
     end
   end
-
 
   @spec find_site([{term(), term()}]) :: {:ok, t()} | {:error, term()}
   def find_site(param) do

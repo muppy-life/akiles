@@ -11,13 +11,13 @@ defmodule Akiles.Organization do
   defstruct [:id, :name, :is_deleted, :is_disabled, :created_at, :metadata]
 
   @type t() :: %__MODULE__{
-    id: String.t(),
-    name: String.t(),
-    is_deleted: boolean(),
-    is_disabled: boolean(),
-    created_at: DateTime.t(),
-    metadata: Map.t()
-  }
+          id: String.t(),
+          name: String.t(),
+          is_deleted: boolean(),
+          is_disabled: boolean(),
+          created_at: DateTime.t(),
+          metadata: Map.t()
+        }
 
   @doc """
   Performs an HTTP 'GET' action for the Organization.

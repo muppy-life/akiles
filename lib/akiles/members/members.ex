@@ -9,21 +9,28 @@ defmodule Akiles.Member do
   @endpoint "/members"
 
   defstruct [
-    :id, :name, :organization_id, :starts_at, :ends_at,
-    :is_deleted, :is_disabled, :created_at, :metadata
+    :id,
+    :name,
+    :organization_id,
+    :starts_at,
+    :ends_at,
+    :is_deleted,
+    :is_disabled,
+    :created_at,
+    :metadata
   ]
 
   @type t() :: %__MODULE__{
-    id: term(),
-    name: term(),
-    organization_id: term(),
-    starts_at: DateTime.t(),
-    ends_at: DateTime.t(),
-    is_deleted: boolean(),
-    is_disabled: boolean(),
-    created_at: DateTime.t(),
-    metadata: map()
-  }
+          id: term(),
+          name: term(),
+          organization_id: term(),
+          starts_at: DateTime.t(),
+          ends_at: DateTime.t(),
+          is_deleted: boolean(),
+          is_disabled: boolean(),
+          created_at: DateTime.t(),
+          metadata: map()
+        }
 
   @doc """
   Lists all members.

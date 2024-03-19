@@ -1,5 +1,4 @@
 defmodule Akiles.Http do
-
   alias HTTPoison.Response
 
   @doc """
@@ -23,11 +22,14 @@ defmodule Akiles.Http do
   @spec get(term()) :: {:ok, map()} | {:ok, list()} | {:error, term()}
   def get(endpoint) do
     with {:ok, %Response{body: res}} <- HTTPoison.get(base_url() <> endpoint, headers()),
-      {:ok, res} <- Jason.decode(res) do
-        case res do
-          %{"args" => _, "message" => msg, "type" => type} -> {:error, "#{type |> String.upcase()} - #{msg}"}
-          res -> {:ok, res}
-        end
+         {:ok, res} <- Jason.decode(res) do
+      case res do
+        %{"args" => _, "message" => msg, "type" => type} ->
+          {:error, "#{type |> String.upcase()} - #{msg}"}
+
+        res ->
+          {:ok, res}
+      end
     else
       {:error, msg} -> {:error, msg}
     end
@@ -81,7 +83,8 @@ defmodule Akiles.Http do
                 ...
               }]}
   """
-  @spec list(term(), [{atom(), term()}] | nil, term() | nil) :: {:ok, [map()]} | {:ok, []} | {:error, term()}
+  @spec list(term(), [{atom(), term()}] | nil, term() | nil) ::
+          {:ok, [map()]} | {:ok, []} | {:error, term()}
   def list(endpoint, filter_val \\ nil, cursor \\ nil) do
     case list_inner(endpoint, filter_val, cursor) do
       {:error, msg} -> {:error, msg}
@@ -113,19 +116,26 @@ defmodule Akiles.Http do
           ...
         }]
   """
-  @spec list_inner(term(), [{term(), term()}] | nil, term() | nil) :: list() | map() | {:error, term()}
+  @spec list_inner(term(), [{term(), term()}] | nil, term() | nil) ::
+          list() | map() | {:error, term()}
   defp list_inner(endpoint, filter_val, cursor) do
-    params = case {filter_val, cursor} do
-      {nil, nil} -> []
-      {[{field, val}], nil} -> [{field, val}]
-      {nil, cursor} -> [cursor: cursor]
-      {[{field, val}], cursor} -> [{field, val}, cursor: cursor]
-    end
+    params =
+      case {filter_val, cursor} do
+        {nil, nil} -> []
+        {[{field, val}], nil} -> [{field, val}]
+        {nil, cursor} -> [cursor: cursor]
+        {[{field, val}], cursor} -> [{field, val}, cursor: cursor]
+      end
 
     case get(endpoint, params) do
-      {:ok, %{"has_next" => true, "cursor_next" => cursor_next, "data" => data}} -> data ++ list_inner(endpoint, filter_val, cursor_next)
-      {:ok, %{"has_next" => false, "data" => data}} -> data
-      {:error, msg} -> {:error, msg}
+      {:ok, %{"has_next" => true, "cursor_next" => cursor_next, "data" => data}} ->
+        data ++ list_inner(endpoint, filter_val, cursor_next)
+
+      {:ok, %{"has_next" => false, "data" => data}} ->
+        data
+
+      {:error, msg} ->
+        {:error, msg}
     end
   end
 
@@ -136,19 +146,28 @@ defmodule Akiles.Http do
   def search(endpoint, [{key, val}], cursor) when key |> is_atom() do
     search(endpoint, [{key |> Atom.to_string(), val}], cursor)
   end
+
   def search(endpoint, [{key, val}] = param, nil) do
     res = get(endpoint)
+
     manage_search(endpoint, res, param)
-    |> then(& {:ok, &1})
-  end
-  def search(endpoint, [{key, val}] = param, cursor) do
-    res = get(endpoint, cursor: cursor)
-    manage_search(endpoint, res, param)
-    |> then(& {:ok, &1})
+    |> then(&{:ok, &1})
   end
 
-  defp manage_search(endpoint, {:ok, %{"has_next" => true, "cursor_next" => cursor, "data" => data}}, [{key, val}] = param) do
+  def search(endpoint, [{key, val}] = param, cursor) do
+    res = get(endpoint, cursor: cursor)
+
+    manage_search(endpoint, res, param)
+    |> then(&{:ok, &1})
+  end
+
+  defp manage_search(
+         endpoint,
+         {:ok, %{"has_next" => true, "cursor_next" => cursor, "data" => data}},
+         [{key, val}] = param
+       ) do
     res = data |> Enum.find(fn x -> Map.get(x, key) == val end)
+
     case res do
       nil -> search(endpoint, param, cursor)
       res -> res
@@ -183,12 +202,15 @@ defmodule Akiles.Http do
   @spec patch(term(), map()) :: {:ok, map()} | {:error, term()}
   def patch(endpoint, data) do
     with {:ok, data} <- Jason.encode(data),
-      {:ok, %Response{body: res}} <- HTTPoison.patch(base_url() <> endpoint, data, headers()),
-      {:ok, res} <- Jason.decode(res) do
-        case res do
-          %{"args" => _, "message" => msg, "type" => type} -> {:error, "#{type |> String.upcase()} - #{msg}"}
-          res -> {:ok, res}
-        end
+         {:ok, %Response{body: res}} <- HTTPoison.patch(base_url() <> endpoint, data, headers()),
+         {:ok, res} <- Jason.decode(res) do
+      case res do
+        %{"args" => _, "message" => msg, "type" => type} ->
+          {:error, "#{type |> String.upcase()} - #{msg}"}
+
+        res ->
+          {:ok, res}
+      end
     else
       {:error, msg} -> {:error, msg}
     end
@@ -216,12 +238,15 @@ defmodule Akiles.Http do
   @spec post(term(), map()) :: {:ok, map()} | {:error, term()}
   def post(endpoint, data) do
     with {:ok, data} <- Jason.encode(data),
-      {:ok, %Response{body: res}} <- HTTPoison.post(base_url() <> endpoint, data, headers()),
-      {:ok, res} <- Jason.decode(res) do
-        case res do
-          %{"args" => _, "message" => msg, "type" => type} -> {:error, "#{type |> String.upcase()} - #{msg}"}
-          res -> {:ok, res}
-        end
+         {:ok, %Response{body: res}} <- HTTPoison.post(base_url() <> endpoint, data, headers()),
+         {:ok, res} <- Jason.decode(res) do
+      case res do
+        %{"args" => _, "message" => msg, "type" => type} ->
+          {:error, "#{type |> String.upcase()} - #{msg}"}
+
+        res ->
+          {:ok, res}
+      end
     else
       {:error, msg} -> {:error, msg}
     end
@@ -249,11 +274,14 @@ defmodule Akiles.Http do
   @spec delete(term()) :: {:ok, map()} | {:error, term()}
   def delete(endpoint) do
     with {:ok, %Response{body: res}} <- HTTPoison.delete(base_url() <> endpoint, headers()),
-      {:ok, res} <- Jason.decode(res) do
-        case res do
-          %{"args" => _, "message" => msg, "type" => type} -> {:error, "#{type |> String.upcase()} - #{msg}"}
-          res -> {:ok, res}
-        end
+         {:ok, res} <- Jason.decode(res) do
+      case res do
+        %{"args" => _, "message" => msg, "type" => type} ->
+          {:error, "#{type |> String.upcase()} - #{msg}"}
+
+        res ->
+          {:ok, res}
+      end
     else
       {:error, msg} -> {:error, msg}
     end

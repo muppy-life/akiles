@@ -3,11 +3,11 @@ defmodule Akiles.GroupsTest do
   alias Akiles.Group
 
   test "list_groups/0 works well" do
-    assert {:ok, _data} = Group.list_groups
+    assert {:ok, _data} = Group.list_groups()
   end
 
   test "get_group/1 works well" do
-    assert {:ok, [group | _rest]} = Group.list_groups
+    assert {:ok, [group | _rest]} = Group.list_groups()
     assert {:ok, _data} = Group.get_group(group.id)
   end
 

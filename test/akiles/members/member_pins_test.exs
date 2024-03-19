@@ -5,17 +5,20 @@ defmodule Members.MemberPinsTest do
 
   test "create & edit & delete & reveal" do
     input_user_data = %{name: "Markus"}
+
     pin_data = %{
       length: 10,
       pin: "1234567890",
       metadata: %{}
     }
+
     pin_edit = %{
       metadata: %{
         key1: "value1",
         key2: "value2"
       }
     }
+
     {:ok, created_user} = Member.create_member(input_user_data)
     {:ok, created_pin} = MemberPin.create_pin(created_user.id, pin_data)
     {:ok, reveal_created} = MemberPin.reveal_pin(created_user.id, created_pin.id)
@@ -40,11 +43,13 @@ defmodule Members.MemberPinsTest do
 
   test "list & get" do
     input_user_data = %{name: "John Doe"}
+
     pin_data = %{
       length: 10,
       pin: "1234567890",
       metadata: %{}
     }
+
     {:ok, created_user} = Member.create_member(input_user_data)
     {:ok, created_pin} = MemberPin.create_pin(created_user.id, pin_data)
     {:ok, [pin | _rest]} = MemberPin.list_pins(created_user.id)

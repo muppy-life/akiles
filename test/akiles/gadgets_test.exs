@@ -3,12 +3,12 @@ defmodule Akiles.GadgetsTest do
   alias Akiles.Gadget
 
   test "list_gadgets/0 works well" do
-    {:ok, gadgets} = Gadget.list_gadgets
+    {:ok, gadgets} = Gadget.list_gadgets()
     assert %Gadget{} = gadgets |> List.first()
   end
 
   test "get_gadget/1 works well" do
-    {:ok, [gadget | _rest]} = Gadget.list_gadgets
+    {:ok, [gadget | _rest]} = Gadget.list_gadgets()
     {:ok, target} = Gadget.get_gadget(gadget.id)
     assert target == gadget
   end
