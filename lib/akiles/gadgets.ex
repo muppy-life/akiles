@@ -58,7 +58,6 @@ defmodule Akiles.Gadget do
         },
         ...
       ]}
-
   """
   def list_gadgets do
     with {:ok, res} <- Http.list(@endpoint) do
@@ -91,7 +90,6 @@ defmodule Akiles.Gadget do
           ...
           }
         }
-
   """
   def get_gadget(gadget_id) do
     with {:ok, res} <- Http.get(@endpoint <> "/" <> gadget_id) do
@@ -151,9 +149,5 @@ defmodule Akiles.Gadget do
     else
       res -> Utils.manage_error(res, __MODULE__)
     end
-  end
-
-  def do_gadget_action(gadget_id, action_id) do
-    # White Label ??
   end
 end
