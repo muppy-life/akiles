@@ -20,6 +20,6 @@ defmodule Akiles.GadgetsTest do
 
   test "do_gadget_action/2 works well" do
     {:ok, [gadget | _rest]} = Gadget.list_gadgets()
-    assert :ok = Gadget.do_gadget_action(gadget.id, "open")
+    assert :ok == Gadget.do_gadget_action(gadget.id, "open")
   end
 end
