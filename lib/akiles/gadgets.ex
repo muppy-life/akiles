@@ -150,4 +150,23 @@ defmodule Akiles.Gadget do
       res -> Utils.manage_error(res, __MODULE__)
     end
   end
+
+  @doc """
+  Performs an action on a gadget.
+
+  Returns :ok
+
+  ## Example
+  iex> Akiles.Gadget.do_gadget_action("gad_3merk33gt1hnl6pvbu71", "open")
+  :ok
+  """
+  def do_gadget_action(gadget_id, action_id) do
+    url = @endpoint <> "/" <> gadget_id <> "/actions" <> "/" <> action_id
+
+    with {:ok, _res} <- Http.post(url, %{}) do
+      :ok
+    else
+      res -> Utils.manage_error(res, __MODULE__)
+    end
+  end
 end
