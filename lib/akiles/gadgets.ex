@@ -12,6 +12,7 @@ defmodule Akiles.Gadget do
     :id,
     :organization_id,
     :site_id,
+    :device_id,
     :name,
     :position,
     :actions,
@@ -24,6 +25,7 @@ defmodule Akiles.Gadget do
           id: term(),
           organization_id: term(),
           site_id: term(),
+          device_id: term(),
           name: term(),
           actions: [gadget_action()],
           is_deleted: [boolean()],
@@ -41,23 +43,30 @@ defmodule Akiles.Gadget do
 
   returns {:ok, data}
   ## Examples
-
-      iex> Akiles.Gadget.list_gadgets
+      iex> Akiles.Gadget.list_gadgets()
       {:ok, [
         %Akiles.Gadget{
-          "id": "gad_3merk33gt1hnl6pvbu71",
-          "organization_id": "org_3merk33gt1v9ypgfzrp1",
-          "site_id": "site_3merk33gt21kym11een1",
-          "name": "string",
-          "actions": [
-          {
-            "id": "open",
-            "name": "Open"
-          }],
-          ...
-        },
-        ...
+          id: "gad_3ymsqc2ja8zcls67vhy1",
+          organization_id: "org_3uzx1fn9pl87fcyv11c1", 
+          site_id: "site_3ym2ur1zvr1x9t2185hh",
+          device_id: "dev_3ymsqc2ja38hcxaqldk1",
+          name: "Puerta piso",
+          position: nil,
+          actions: [
+            %{
+              :id => "open",
+              :index => 0, 
+              :name => "open",
+              :help => "push_door",
+              "i18n_name" => "open"
+            }
+          ],
+          is_deleted: false,
+          created_at: "2024-01-12T13:11:37.799991296Z",
+          metadata: %{}
+        }
       ]}
+
   """
   def list_gadgets do
     with {:ok, res} <- Http.list(@endpoint) do
@@ -78,17 +87,25 @@ defmodule Akiles.Gadget do
 
       iex> Akiles.Gadget.get_gadget("gad_3merk33gt1hnl6pvbu71")
       {:ok, %Akiles.Gadget{
-          "id": "gad_3merk33gt1hnl6pvbu71",
-          "organization_id": "org_3merk33gt1v9ypgfzrp1",
-          "site_id": "site_3merk33gt21kym11een1",
-          "name": "string",
-          "actions": [
-          {
-            "id": "open",
-            "name": "Open"
-          }],
-          ...
-          }
+          id: "gad_3ymsqc2ja8zcls67vhy1",
+          organization_id: "org_3uzx1fn9pl87fcyv11c1", 
+          site_id: "site_3ym2ur1zvr1x9t2185hh",
+          device_id: "dev_3ymsqc2ja38hcxaqldk1",
+          name: "Puerta piso",
+          position: nil,
+          actions: [
+            %{
+              :id => "open",
+              :index => 0, 
+              :name => "open",
+              :help => "push_door",
+              "i18n_name" => "open"
+            }
+          ],
+          is_deleted: false,
+          created_at: "2024-01-12T13:11:37.799991296Z",
+          metadata: %{}
+        }
         }
   """
   def get_gadget(gadget_id) do
@@ -123,21 +140,24 @@ defmodule Akiles.Gadget do
                                                                         "key2": "value2"}
                                                                   })
       {:ok, %Akiles.Gadget{
-        "id": "gad_3merk33gt1hnl6pvbu71",
-        "organization_id": "org_3merk33gt1v9ypgfzrp1",
-        "site_id": "site_3merk33gt21kym11een1",
-        "name": "string",
-        "actions": [
-          {
-            "id": "open",
-            "name": "Open"
-          }
-        ],
-        "is_deleted": false,
-        "created_at": "2018-03-13T16:56:51.766836837Z",
-        "metadata": {
-          "key1": "value1",
-          "key2": "value2"
+          id: "gad_3ymsqc2ja8zcls67vhy1",
+          organization_id: "org_3uzx1fn9pl87fcyv11c1", 
+          site_id: "site_3ym2ur1zvr1x9t2185hh",
+          device_id: "dev_3ymsqc2ja38hcxaqldk1",
+          name: "Puerta piso",
+          position: nil,
+          actions: [
+            %{
+              :id => "open",
+              :index => 0, 
+              :name => "open",
+              :help => "push_door",
+              "i18n_name" => "open"
+            }
+          ],
+          is_deleted: false,
+          created_at: "2024-01-12T13:11:37.799991296Z",
+          metadata: %{}
         }
       }
   """
