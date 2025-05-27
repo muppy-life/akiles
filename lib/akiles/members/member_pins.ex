@@ -9,23 +9,25 @@ defmodule Akiles.MemberPin do
   def endpoint(member_id), do: "/members/" <> member_id <> "/pins"
 
   defstruct [
-    :id,
-    :member_id,
-    :length,
-    :pin,
-    :is_deleted,
     :created_at,
-    :metadata
+    :id,
+    :is_deleted,
+    :length,
+    :member_id,
+    :metadata,
+    :organization_id,
+    :pin
   ]
 
   @type t() :: %__MODULE__{
-          id: term(),
-          member_id: term(),
-          length: Integer.t(),
-          pin: term(),
-          is_deleted: boolean(),
           created_at: DateTime.t(),
-          metadata: map()
+          id: term(),
+          is_deleted: boolean(),
+          length: Integer.t(),
+          member_id: term(),
+          metadata: map(),
+          organization_id: term(),
+          pin: term()
         }
 
   @doc """
