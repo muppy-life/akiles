@@ -18,7 +18,10 @@ defmodule Akiles.Gadget do
     :actions,
     :is_deleted,
     :created_at,
-    :metadata
+    :metadata,
+    :states,
+    :signals,
+    :state_id
   ]
 
   @type t() :: %__MODULE__{
@@ -30,7 +33,10 @@ defmodule Akiles.Gadget do
           actions: [gadget_action()],
           is_deleted: [boolean()],
           created_at: DateTime.t(),
-          metadata: map()
+          metadata: map(),
+          states: list(),
+          signals: list(),
+          state_id: term() | nil
         }
 
   @type gadget_action() :: %{
