@@ -298,7 +298,7 @@ defmodule Akiles.Http do
     ]
   end
 
-  def timeout do
+  defp timeout do
     [
       timeout: Application.get_env(:akiles, :timeout, 60_000),
       recv_timeout: Application.get_env(:akiles, :recv_timeout, 120_000)
