@@ -21,7 +21,8 @@ defmodule Akiles.Http do
   """
   @spec get(term()) :: {:ok, map()} | {:ok, list()} | {:error, term()}
   def get(endpoint) do
-    with {:ok, %Response{body: res}} <- HTTPoison.get(base_url() <> endpoint, headers()),
+    with {:ok, %Response{body: res}} <-
+           HTTPoison.get(base_url() <> endpoint, headers(), timeout()),
          {:ok, res} <- Jason.decode(res) do
       case res do
         %{"args" => _, "message" => msg, "type" => type} ->
@@ -202,7 +203,8 @@ defmodule Akiles.Http do
   @spec patch(term(), map()) :: {:ok, map()} | {:error, term()}
   def patch(endpoint, data) do
     with {:ok, data} <- Jason.encode(data),
-         {:ok, %Response{body: res}} <- HTTPoison.patch(base_url() <> endpoint, data, headers()),
+         {:ok, %Response{body: res}} <-
+           HTTPoison.patch(base_url() <> endpoint, data, headers(), timeout()),
          {:ok, res} <- Jason.decode(res) do
       case res do
         %{"args" => _, "message" => msg, "type" => type} ->
@@ -238,7 +240,8 @@ defmodule Akiles.Http do
   @spec post(term(), map()) :: {:ok, map()} | {:error, term()}
   def post(endpoint, data) do
     with {:ok, data} <- Jason.encode(data),
-         {:ok, %Response{body: res}} <- HTTPoison.post(base_url() <> endpoint, data, headers()),
+         {:ok, %Response{body: res}} <-
+           HTTPoison.post(base_url() <> endpoint, data, headers(), timeout()),
          {:ok, res} <- Jason.decode(res) do
       case res do
         %{"args" => _, "message" => msg, "type" => type} ->
@@ -273,7 +276,8 @@ defmodule Akiles.Http do
   """
   @spec delete(term()) :: {:ok, map()} | {:error, term()}
   def delete(endpoint) do
-    with {:ok, %Response{body: res}} <- HTTPoison.delete(base_url() <> endpoint, headers()),
+    with {:ok, %Response{body: res}} <-
+           HTTPoison.delete(base_url() <> endpoint, headers(), timeout()),
          {:ok, res} <- Jason.decode(res) do
       case res do
         %{"args" => _, "message" => msg, "type" => type} ->
@@ -291,6 +295,13 @@ defmodule Akiles.Http do
     [
       {"Authorization", "Bearer " <> Application.fetch_env!(:akiles, :api_key)},
       {"Content-type", "application/json"}
+    ]
+  end
+
+  def timeout do
+    [
+      timeout: Application.get_env(:akiles, :timeout, 60_000),
+      recv_timeout: Application.get_env(:akiles, :recv_timeout, 120_000)
     ]
   end
 
