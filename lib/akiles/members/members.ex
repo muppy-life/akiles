@@ -17,7 +17,8 @@ defmodule Akiles.Member do
     :is_deleted,
     :is_disabled,
     :created_at,
-    :metadata
+    :metadata,
+    :tag_ids
   ]
 
   @type t() :: %__MODULE__{
@@ -29,7 +30,8 @@ defmodule Akiles.Member do
           is_deleted: boolean(),
           is_disabled: boolean(),
           created_at: DateTime.t(),
-          metadata: map()
+          metadata: map(),
+          tag_ids: list()
         }
 
   @doc """
