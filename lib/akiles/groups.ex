@@ -15,7 +15,8 @@ defmodule Akiles.Group do
     :permissions,
     :is_deleted,
     :created_at,
-    :metadata
+    :metadata,
+    :tag_ids
   ]
 
   @type t() :: %__MODULE__{
@@ -25,7 +26,8 @@ defmodule Akiles.Group do
           permissions: list(),
           is_deleted: boolean(),
           created_at: DateTime.t(),
-          metadata: map()
+          metadata: map(),
+          tag_ids: list()
         }
 
   @doc """
