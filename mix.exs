@@ -23,7 +23,8 @@ defmodule Akiles.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.8"},
-      {:jason, "~> 1.0"}
+      {:jason, "~> 1.0"},
+      {:bypass, "~> 2.1", only: :test}
     ]
   end
 
