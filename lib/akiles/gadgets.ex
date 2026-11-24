@@ -21,7 +21,8 @@ defmodule Akiles.Gadget do
     :metadata,
     :states,
     :signals,
-    :state_id
+    :state_id,
+    :tag_ids
   ]
 
   @type t() :: %__MODULE__{
@@ -36,7 +37,8 @@ defmodule Akiles.Gadget do
           metadata: map(),
           states: list(),
           signals: list(),
-          state_id: term() | nil
+          state_id: term() | nil,
+          tag_ids: list()
         }
 
   @type gadget_action() :: %{
@@ -78,7 +80,7 @@ defmodule Akiles.Gadget do
     with {:ok, res} <- Http.list(@endpoint) do
       res
       |> Utils.keys_to_atoms()
-      |> Enum.map(&struct!(%__MODULE__{}, &1))
+      |> Enum.map(&struct(__MODULE__, &1))
       |> then(&{:ok, &1})
     else
       res -> Utils.manage_error(res, __MODULE__)
@@ -118,7 +120,7 @@ defmodule Akiles.Gadget do
     with {:ok, res} <- Http.get(@endpoint <> "/" <> gadget_id) do
       res
       |> Utils.keys_to_atoms()
-      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+      |> then(&{:ok, struct(__MODULE__, &1)})
     else
       res -> Utils.manage_error(res, __MODULE__)
     end
@@ -129,7 +131,7 @@ defmodule Akiles.Gadget do
     with {:ok, res} <- Http.search(@endpoint, param, nil) do
       res
       |> Utils.keys_to_atoms()
-      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+      |> then(&{:ok, struct(__MODULE__, &1)})
     else
       res -> Utils.manage_error(res, __MODULE__)
     end
@@ -171,7 +173,7 @@ defmodule Akiles.Gadget do
     with {:ok, res} <- Http.patch(@endpoint <> "/" <> gadget_id, data) do
       res
       |> Utils.keys_to_atoms()
-      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+      |> then(&{:ok, struct(__MODULE__, &1)})
     else
       res -> Utils.manage_error(res, __MODULE__)
     end

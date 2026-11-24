@@ -36,7 +36,7 @@ defmodule Akiles.Organization do
   @spec get_organization() :: {:ok, t()} | {:error, term()}
   def get_organization() do
     with {:ok, res} <- Http.get(@endpoint) do
-      res |> Utils.keys_to_atoms() |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+      res |> Utils.keys_to_atoms() |> then(&{:ok, struct(__MODULE__, &1)})
     else
       res -> Utils.manage_error(res, __MODULE__)
     end
@@ -61,7 +61,7 @@ defmodule Akiles.Organization do
   @spec edit_organization(Map.t()) :: {:ok, t()} | {:error, term()}
   def edit_organization(data) do
     with {:ok, res} <- Http.patch(@endpoint, %{metadata: data}) do
-      res |> Utils.keys_to_atoms() |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+      res |> Utils.keys_to_atoms() |> then(&{:ok, struct(__MODULE__, &1)})
     else
       res -> Utils.manage_error(res, __MODULE__)
     end

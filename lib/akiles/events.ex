@@ -79,7 +79,7 @@ defmodule Akiles.Event do
       # These statements have to be commented because incoming data is not fully known.
       # It does not fully match the predefined structure for event entity.
       # |> Utils.keys_to_atoms()
-      # |> Enum.map(&struct!(%__MODULE__{}, &1))
+      # |> Enum.map(&struct(__MODULE__, &1))
       |> then(&{:ok, &1})
     else
       res -> Utils.manage_error(res, __MODULE__)
@@ -103,7 +103,7 @@ defmodule Akiles.Event do
     with {:ok, res} <- Http.get(@endpoint <> "/" <> event_id) do
       res
       |> Utils.keys_to_atoms()
-      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+      |> then(&{:ok, struct(__MODULE__, &1)})
     else
       res -> Utils.manage_error(res, __MODULE__)
     end
