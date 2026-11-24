@@ -14,7 +14,11 @@ defmodule Akiles.Utils do
 
   def manage_error(res), do: manage_error(res, nil)
   def manage_error({:error, msg}, nil), do: {:error, msg}
-  def manage_error({:error, msg}, context), do: {:error, "[#{context}] " <> msg}
+
+  def manage_error({:error, msg}, context) when is_binary(msg),
+    do: {:error, "[#{context}] " <> msg}
+
+  def manage_error({:error, reason}, context), do: {:error, "[#{context}] " <> inspect(reason)}
   def manage_error(_res, context), do: {:error, "[#{context}] " <> "Unexpected error!"}
 
   defp manage_to_existing_atom(val) do

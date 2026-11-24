@@ -4,7 +4,7 @@ defmodule Akiles.MixProject do
   def project do
     [
       app: :akiles,
-      version: "0.1.0",
+      version: "2.5.0",
       elixir: "~> 1.19.1",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -23,7 +23,8 @@ defmodule Akiles.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.8"},
-      {:jason, "~> 1.0"}
+      {:jason, "~> 1.0"},
+      {:bypass, "~> 2.1", only: :test}
     ]
   end
 
