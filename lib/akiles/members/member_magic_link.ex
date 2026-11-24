@@ -55,7 +55,7 @@ defmodule Akiles.MemberMagicLink do
     with {:ok, res} <- Http.list(endpoint(member_id)) do
       res
       |> Utils.keys_to_atoms()
-      |> Enum.map(&struct!(%__MODULE__{}, &1))
+      |> Enum.map(&struct(__MODULE__, &1))
       |> then(&{:ok, &1})
     else
       res -> Utils.manage_error(res, __MODULE__)
@@ -86,7 +86,7 @@ defmodule Akiles.MemberMagicLink do
     with {:ok, res} <- Http.post(endpoint(member_id), data) do
       res
       |> Utils.keys_to_atoms()
-      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+      |> then(&{:ok, struct(__MODULE__, &1)})
     else
       res -> Utils.manage_error(res, __MODULE__)
     end
@@ -116,7 +116,7 @@ defmodule Akiles.MemberMagicLink do
     with {:ok, res} <- Http.get(endpoint(member_id) <> "/" <> magic_link_id) do
       res
       |> Utils.keys_to_atoms()
-      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+      |> then(&{:ok, struct(__MODULE__, &1)})
     else
       res -> Utils.manage_error(res, __MODULE__)
     end
@@ -146,7 +146,7 @@ defmodule Akiles.MemberMagicLink do
     with {:ok, res} <- Http.patch(endpoint(member_id) <> "/" <> magic_link_id, data) do
       res
       |> Utils.keys_to_atoms()
-      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+      |> then(&{:ok, struct(__MODULE__, &1)})
     else
       res -> Utils.manage_error(res, __MODULE__)
     end
@@ -176,7 +176,7 @@ defmodule Akiles.MemberMagicLink do
     with {:ok, res} <- Http.delete(endpoint(member_id) <> "/" <> magic_link_id) do
       res
       |> Utils.keys_to_atoms()
-      |> then(&{:ok, struct!(%__MODULE__{}, &1)})
+      |> then(&{:ok, struct(__MODULE__, &1)})
     else
       res -> Utils.manage_error(res, __MODULE__)
     end
