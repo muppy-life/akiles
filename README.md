@@ -10,7 +10,7 @@ The package can be installed by adding `akiles` to your list of dependencies in 
 def deps do
   [ 
     # ...
-    {:akiles, git: "git@github.com:muppy-life/akiles.git", tag: "v2"},
+    {:akiles, git: "git@github.com:muppy-life/akiles.git", tag: "v2.5.0"},
     # ...
   ]
 end
